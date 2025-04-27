@@ -13,4 +13,16 @@ public interface IJsonPlaceholderService
 
     Task ClearCacheAsync();
     Task RefreshCacheAsync();
+
+    // Redis List operations
+    Task AddToListAsync(string key, string value);
+    Task<IEnumerable<string>> GetListAsync(string key);
+
+    // Redis Set operations
+    Task AddToSetAsync(string key, string value);
+    Task<IEnumerable<string>> GetSetAsync(string key);
+
+    // Redis Pub/Sub operations
+    Task PublishMessageAsync(string channel, string message);
+    Task SubscribeToChannelAsync(string channel);
 }

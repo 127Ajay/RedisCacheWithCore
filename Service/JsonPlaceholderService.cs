@@ -24,7 +24,8 @@ public class JsonPlaceholderService : IJsonPlaceholderService
     private async Task<IEnumerable<T>> GetCachedDataAsync<T>(string endpoint, string cacheKey, string entityName)
     {
 
-        try { 
+        try
+        {
             var cachedData = await _redisService.GetDataAsync<IEnumerable<T>>(cacheKey);
             if (cachedData != null)
             {
@@ -116,5 +117,48 @@ public class JsonPlaceholderService : IJsonPlaceholderService
         {
             _logger.LogError(ex, "Error occurred while refreshing cache: {Message}", ex.Message);
         }
+    }
+
+    // Example of using Redis List operations
+    public async Task AddToListAsync(string key, string value)
+    {
+        await _redisService.PushToListAsync(key, value);
+        _logger.LogInformation($"Added {value} to list {key}");
+    }
+
+    public async Task<IEnumerable<string>> GetListAsync(string key)
+    {
+        var list = await _redisService.GetListAsync(key);
+        _logger.LogInformation($"Retrieved list {key} with {list.Length} items");
+        return list;
+    }
+
+    // Example of using Redis Set operations
+    public async Task AddToSetAsync(string key, string value)
+    {
+        await _redisService.AddToSetAsync(key, value);
+        _logger.LogInformation($"Added {value} to set {key}");
+    }
+
+    public async Task<IEnumerable<string>> GetSetAsync(string key)
+    {
+        var set = await _redisService.GetSetMembersAsync(key);
+        _logger.LogInformation($"Retrieved set {key} with {set.Length} members");
+        return set;
+    }
+
+    // Example of using Redis Pub/Sub operations
+    public async Task PublishMessageAsync(string channel, string message)
+    {
+        await _redisService.PublishAsync(channel, message);
+        _logger.LogInformation($"Published message to channel {channel}: {message}");
+    }
+
+    public async Task SubscribeToChannelAsync(string channel)
+    {
+        await _redisService.SubscribeAsync(channel, message =>
+        {
+            _logger.LogInformation($"Received message on channel {channel}: {message}");
+        });
     }
 }
