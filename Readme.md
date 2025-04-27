@@ -58,6 +58,92 @@ Fetches a list of posts from the JSONPlaceholder API.
 
 Refreshes the Redis cache with the latest data.
 
+## API Examples
+
+### String Operations
+
+#### Add a String
+
+**Endpoint:** `POST /api/list/{key}`
+
+**Request Body:**
+
+```json
+"exampleValue"
+```
+
+**Response:**
+
+```json
+"Added exampleValue to list exampleKey"
+```
+
+#### Get a String
+
+**Endpoint:** `GET /api/list/{key}`
+
+**Response:**
+
+```json
+["exampleValue"]
+```
+
+### Hash Operations
+
+#### Add to Hash
+
+**Endpoint:** `POST /api/hashset/{key}`
+
+**Request Body:**
+
+```json
+"exampleField"
+```
+
+**Response:**
+
+```json
+"Added exampleField to set exampleKey"
+```
+
+#### Get Hash
+
+**Endpoint:** `GET /api/hashset/{key}`
+
+**Response:**
+
+```json
+["exampleField"]
+```
+
+### Pub/Sub Operations
+
+#### Publish a Message
+
+**Endpoint:** `POST /api/publish/{channel}`
+
+**Request Body:**
+
+```json
+"exampleMessage"
+```
+
+**Response:**
+
+```json
+"Published message to channel exampleChannel: exampleMessage"
+```
+
+#### Subscribe to a Channel
+
+**Endpoint:** `GET /api/subscribe/{channel}`
+
+**Response:**
+
+```json
+"Subscribed to channel exampleChannel"
+```
+
 ## Prerequisites
 
 -   .NET 9.0 SDK

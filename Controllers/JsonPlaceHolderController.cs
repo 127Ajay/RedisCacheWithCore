@@ -5,7 +5,7 @@ namespace RedisCacheWithCore.Controllers;
 
 [ApiController]
 [Route("/api")]
-public class JsonPlaceHolderController :Controller
+public class JsonPlaceHolderController : Controller
 {
     private readonly IJsonPlaceholderService _jsonPlaceholderService;
     public JsonPlaceHolderController(IJsonPlaceholderService jsonPlaceholderService)
@@ -74,7 +74,7 @@ public class JsonPlaceHolderController :Controller
         });
     }
 
-    [HttpDelete("clear-cache")] 
+    [HttpDelete("clear-cache")]
     public async Task ClearDataAsync()
     {
         await _jsonPlaceholderService.ClearCacheAsync();
@@ -84,5 +84,47 @@ public class JsonPlaceHolderController :Controller
     public async Task RefreshCacheAsync()
     {
         await _jsonPlaceholderService.RefreshCacheAsync();
+    }
+
+    [HttpPost("list/{key}")]
+    public async Task<IActionResult> AddToList(string key, [FromBody] string value)
+    {
+        await _jsonPlaceholderService.AddToListAsync(key, value);
+        return Ok($"Added {value} to list {key}");
+    }
+
+    [HttpGet("list/{key}")]
+    public async Task<IActionResult> GetList(string key)
+    {
+        var list = await _jsonPlaceholderService.GetListAsync(key);
+        return Ok(list);
+    }
+
+    [HttpPost("hashset/{key}")]
+    public async Task<IActionResult> AddToSet(string key, [FromBody] string value)
+    {
+        await _jsonPlaceholderService.AddToSetAsync(key, value);
+        return Ok($"Added {value} to set {key}");
+    }
+
+    [HttpGet("hashset/{key}")]
+    public async Task<IActionResult> GetSet(string key)
+    {
+        var set = await _jsonPlaceholderService.GetSetAsync(key);
+        return Ok(set);
+    }
+
+    [HttpPost("publish/{channel}")]
+    public async Task<IActionResult> PublishMessage(string channel, [FromBody] string message)
+    {
+        await _jsonPlaceholderService.PublishMessageAsync(channel, message);
+        return Ok($"Published message to channel {channel}: {message}");
+    }
+
+    [HttpGet("subscribe/{channel}")]
+    public async Task<IActionResult> SubscribeToChannel(string channel)
+    {
+        await _jsonPlaceholderService.SubscribeToChannelAsync(channel);
+        return Ok($"Subscribed to channel {channel}");
     }
 }
